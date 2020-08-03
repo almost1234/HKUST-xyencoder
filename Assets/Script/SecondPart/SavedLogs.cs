@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class SavedLogs : MonoBehaviour
 {
-    Dictionary<string, List<CordPoint>> data;
+    Dictionary<string, Dictionary<float, CordPoint>> data;
 
     private void Awake()
     {
-        data = new Dictionary<string, List<CordPoint>>();
+        data = new Dictionary<string, Dictionary<float, CordPoint>>();
         if (data == null) 
         {
             Debug.LogError("Dic not created!");
@@ -17,17 +17,13 @@ public class SavedLogs : MonoBehaviour
         //Insert future read all saved logs in text
     }
 
-    public void SaveLog(List<CordPoint> dataGet) 
+    public void SaveLog(Dictionary<float, CordPoint> dataGet) 
     {
-        if (dataGet == null) 
-        {
-            Debug.LogError("EMPTY!");
-        }
         data.Add(DateTime.Now.ToString(), dataGet);
         Debug.LogWarning("Current saved log " + data.Count);
     }
 
-    public Dictionary<string, List<CordPoint>> GetLog() 
+    public Dictionary<string, Dictionary<float,CordPoint>> GetLog() 
     {
         return data;
     }

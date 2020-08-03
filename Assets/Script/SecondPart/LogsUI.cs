@@ -17,26 +17,21 @@ public class LogsUI : MonoBehaviour
     {
         logDateText = log.GetComponentInChildren<Text>();
     }
-    public void GenerateLogs(Dictionary<string, List<CordPoint>> dataPoints) 
+    public void GenerateLogs(Dictionary<string, Dictionary<float,CordPoint>> dataPoints) 
     {
         DestroyLogs();
        
-        foreach(KeyValuePair<string, List<CordPoint>> data in dataPoints) 
+        foreach(KeyValuePair<string, Dictionary<float,CordPoint>> data in dataPoints) 
         {
             logDateText.text = data.Key;
-            if (data.Value == null) 
-            {
-                Debug.LogError("This bitch empty");
-
-            }
             Button logButton = Instantiate(log, logsGroup).GetComponent<Button>();
             logButton.onClick.AddListener(delegate
             {
                 dotUI.DestroyAllDot();
                 Debug.Log("DOT DELETED");
-                foreach (CordPoint cord in data.Value)
+                foreach (KeyValuePair<float, CordPoint> cord in data.Value)
                 {
-                    dotUI.GenerateDot(cord);
+                    dotUI.GenerateDot(cord.Key, cord.Value);
                 }
             }
             );

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestDotUI : MonoBehaviour
 {
-    public List<RectTransform> dotList;
+    public Dictionary<float, RectTransform> dotList;
     public GameObject sampleDotGenerate;
     public CalculateCoordinate calCord;
     public Transform RedGroup;
@@ -12,9 +12,9 @@ public class TestDotUI : MonoBehaviour
 
     public void Awake()
     {
-        dotList = new List<RectTransform>();
+        dotList = new Dictionary<float, RectTransform>();
     }
-    public void GenerateDot(CordPoint cordPoint)
+    public void GenerateDot(float time, CordPoint cordPoint)
     {
         switch (cordPoint.type) 
         {
@@ -22,24 +22,24 @@ public class TestDotUI : MonoBehaviour
                 //Red Side coordinate
                 RectTransform redVar = Instantiate(sampleDotGenerate, RedGroup).GetComponent<RectTransform>();
                 redVar.anchoredPosition = calCord.ConvertToRedCord(cordPoint);
-                dotList.Add(redVar);
-                Debug.Log("NEW RED DOT GENERATED");
+                dotList.Add(time, redVar);
+                Debug.Log("NEW RED DOT GENERATED with time " + time) ;
                 break;
             case 1:
                 //Blue Side coordinate
                 RectTransform blueVar = Instantiate(sampleDotGenerate, BlueGroup).GetComponent<RectTransform>();
                 blueVar.anchoredPosition = calCord.ConvertToBlueCord(cordPoint);
-                dotList.Add(blueVar);
-                Debug.Log("NEW BLUE DOT GENERATED");
+                dotList.Add(time, blueVar);
+                Debug.Log("NEW BLUE DOT GENERATED with time "+time);
                 break;
         }
     }
 
     public void DestroyAllDot() //temp func, switch to poolable when done
     {
-        foreach (RectTransform dot in dotList) 
+        foreach (KeyValuePair<float, RectTransform> dot in dotList) 
         {
-            Destroy(dot.gameObject);
+            Destroy(dot.Value.gameObject);
             Debug.Log("I FUKIN DED");
         }
         dotList.Clear();

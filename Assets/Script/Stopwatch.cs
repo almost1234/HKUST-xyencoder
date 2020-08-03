@@ -37,4 +37,9 @@ public class Stopwatch : MonoBehaviour
     {
         startTime = false;
     }
+
+    public float GetTimer() 
+    {
+        return timer;
+    }
 }

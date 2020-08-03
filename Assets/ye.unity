@@ -928,7 +928,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4324d4154306ab49a888d0d0d146463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dotList: []
   sampleDotGenerate: {fileID: 3052292151928589881, guid: 8064ac57762970d40860f4a570aefaaa,
     type: 3}
   calCord: {fileID: 758359908}
@@ -2249,6 +2248,7 @@ GameObject:
   - component: {fileID: 1765064191}
   - component: {fileID: 1765064190}
   - component: {fileID: 1765064193}
+  - component: {fileID: 1765064194}
   m_Layer: 0
   m_Name: DataRelatedManager
   m_TagString: Untagged
@@ -2314,9 +2314,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newList: 1
   generatedNewCord: 0
-  counter: 0
+  lastRecordedTime: 0
   thresholdDifference: 5
   draw: {fileID: 758359907}
+  stopwatch: {fileID: 1765064194}
+--- !u!114 &1765064194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765064189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216c4b624a4d1c2489164d1d61dfd54c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 0
+  startTime: 0
 --- !u!1 &1797245756
 GameObject:
   m_ObjectHideFlags: 0

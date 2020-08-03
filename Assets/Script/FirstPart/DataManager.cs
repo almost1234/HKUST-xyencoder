@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -8,25 +9,26 @@ public class DataManager : MonoBehaviour
 {
     public bool newList = true;
     public bool generatedNewCord = false;
-    public List<CordPoint> tempCordList;
-    public int counter;
+    public Dictionary<float, CordPoint> tempCordList;
+    public float lastRecordedTime;
     public float thresholdDifference;
 
     public TestDotUI draw;
     public Stopwatch stopwatch;
     public void Awake()
     {
-        tempCordList = new List<CordPoint>();
+        tempCordList = new Dictionary<float, CordPoint>();
     }
     public void ReceiveCord(CordPoint cordPoint) //call this function when received a vaild data
     {
         if (newList)
         {
             tempCordList.Clear();
-            tempCordList.Add(cordPoint);
+            stopwatch.StartTimer();
+            lastRecordedTime = stopwatch.GetTimer();
+            tempCordList.Add(lastRecordedTime, cordPoint);
             newList = false;
-            counter = 0;
-            draw.GenerateDot(tempCordList[counter]);
+            draw.GenerateDot(lastRecordedTime, cordPoint);
         }
 
         else 
@@ -37,33 +39,36 @@ public class DataManager : MonoBehaviour
 
     public void ComparePreviousCord(CordPoint newCord) 
     {
-        float xDifference = Mathf.Abs(tempCordList[counter].x - newCord.x);
-        float yDifference = Mathf.Abs(tempCordList[counter].y - newCord.y);
-
+        float xDifference = Mathf.Abs(tempCordList[lastRecordedTime ].x - newCord.x);
+        float yDifference = Mathf.Abs(tempCordList[lastRecordedTime ].y - newCord.y);
+        Debug.LogWarning("THE DATA DIFFERS FROM " + xDifference + "," + yDifference);
         if (xDifference >= thresholdDifference || yDifference >= thresholdDifference) 
         {
             if ((xDifference >= thresholdDifference && yDifference >= thresholdDifference) || generatedNewCord == true)
             {
-                tempCordList.Add(newCord);
+                lastRecordedTime = stopwatch.GetTimer();
+                tempCordList.Add(lastRecordedTime,newCord);
                 generatedNewCord = !generatedNewCord;
-                counter++;
                 Debug.Log("New cord drawn");
             }
 
             else
             {
-                tempCordList[counter] = newCord;
-                Debug.Log("Edited the coordinate");
+                tempCordList.Remove(lastRecordedTime);
+                lastRecordedTime = stopwatch.GetTimer();
+                tempCordList.Add(lastRecordedTime, newCord);
+                Debug.LogWarning("Edited the coordinate");
             }
-            draw.GenerateDot(tempCordList[counter]);
+            draw.GenerateDot(lastRecordedTime, tempCordList[lastRecordedTime]);
             //create a delegate that call LastDotUIUpdate
         }
         //if there is no significant changes, then it will be discarded.
     }
 
-    public List<CordPoint> SendTempCordList() 
+    public Dictionary<float, CordPoint> SendTempCordList() 
     {
         newList = true;
+        stopwatch.StopTimer();
         return tempCordList;
     }
 
