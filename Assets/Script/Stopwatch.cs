@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Stopwatch : MonoBehaviour
 {
-    public float timer;
+    public static float timer;
     public bool startTime;
 
     public void Awake()

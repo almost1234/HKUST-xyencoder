@@ -28,7 +28,6 @@ public class CaseSwitch : MonoBehaviour
     public void ReadCordId() 
     {
         
-        Debug.Log("READING: " + Main.something.id);
         if (comm.uartData.IsOpen) 
         {
             try
@@ -36,13 +35,11 @@ public class CaseSwitch : MonoBehaviour
                 switch (Main.something.id)
                 {
                     case 0:
-                        Debug.Log("Deny");
                         break; //Data is thrown as its not needed
                     case 1:
                         dataManager.ReceiveCord(Main.something);
                         break; //Data is added to the DataMananger for checking + inserting purposes
                     case 2:
-                        Debug.Log("The mcu indicated stop!");
                         Main.readThread.Abort();
                         comm.ChangePortState();
                         savedLogs.SaveLog(dataManager.SendTempCordList());

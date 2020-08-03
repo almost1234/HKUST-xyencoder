@@ -14,7 +14,7 @@ public class TestDotUI : MonoBehaviour
     {
         dotList = new Dictionary<float, RectTransform>();
     }
-    public void GenerateDot(float time, CordPoint cordPoint)
+    public void GenerateDot(float time, CordPoint cordPoint)//add dual function in the future
     {
         switch (cordPoint.type) 
         {
@@ -23,24 +23,25 @@ public class TestDotUI : MonoBehaviour
                 RectTransform redVar = Instantiate(sampleDotGenerate, RedGroup).GetComponent<RectTransform>();
                 redVar.anchoredPosition = calCord.ConvertToRedCord(cordPoint);
                 dotList.Add(time, redVar);
-                Debug.Log("NEW RED DOT GENERATED with time " + time) ;
                 break;
             case 1:
                 //Blue Side coordinate
                 RectTransform blueVar = Instantiate(sampleDotGenerate, BlueGroup).GetComponent<RectTransform>();
                 blueVar.anchoredPosition = calCord.ConvertToBlueCord(cordPoint);
                 dotList.Add(time, blueVar);
-                Debug.Log("NEW BLUE DOT GENERATED with time "+time);
                 break;
         }
     }
 
+    public Dictionary<float, RectTransform> getDotList() 
+    {
+        return dotList;
+    }
     public void DestroyAllDot() //temp func, switch to poolable when done
     {
         foreach (KeyValuePair<float, RectTransform> dot in dotList) 
         {
             Destroy(dot.Value.gameObject);
-            Debug.Log("I FUKIN DED");
         }
         dotList.Clear();
     }

@@ -10,29 +10,38 @@ public class LogsUI : MonoBehaviour
     public TestDotUI dotUI;
     public List<Transform> logsGroupList; //poolsite
     public GameObject log; // prepare a pool for this too
-
+    public SpectateUI spectateUI;
     public Text logDateText;
+
+    public GameObject LogUI;
+    public GameObject FieldUI;
 
     public void Awake()
     {
         logDateText = log.GetComponentInChildren<Text>();
     }
-    public void GenerateLogs(Dictionary<string, Dictionary<float,CordPoint>> dataPoints) 
+    public void GenerateLogs(Dictionary<string[], Dictionary<float,CordPoint>> dataPoints) 
     {
         DestroyLogs();
        
-        foreach(KeyValuePair<string, Dictionary<float,CordPoint>> data in dataPoints) 
+        foreach(KeyValuePair<string[], Dictionary<float,CordPoint>> data in dataPoints) 
         {
-            logDateText.text = data.Key;
+            
+            logDateText.text = data.Key[1];
             Button logButton = Instantiate(log, logsGroup).GetComponent<Button>();
             logButton.onClick.AddListener(delegate
             {
                 dotUI.DestroyAllDot();
-                Debug.Log("DOT DELETED");
                 foreach (KeyValuePair<float, CordPoint> cord in data.Value)
                 {
                     dotUI.GenerateDot(cord.Key, cord.Value);
                 }
+
+                spectateUI.SpectateButtonSetup(float.Parse(data.Key[0]), new Dictionary<float, RectTransform>(dotUI.getDotList()));
+                LogUI.SetActive(false);
+                FieldUI.SetActive(true);
+                Debug.LogWarning("Called replay: " + data.Key[1]);
+                //provide the data and point it was generated?
             }
             );
         }

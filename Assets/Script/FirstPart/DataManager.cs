@@ -44,6 +44,7 @@ public class DataManager : MonoBehaviour
         Debug.LogWarning("THE DATA DIFFERS FROM " + xDifference + "," + yDifference);
         if (xDifference >= thresholdDifference || yDifference >= thresholdDifference) 
         {
+            Debug.LogWarning("Entering second check");
             if ((xDifference >= thresholdDifference && yDifference >= thresholdDifference) || generatedNewCord == true)
             {
                 lastRecordedTime = stopwatch.GetTimer();
