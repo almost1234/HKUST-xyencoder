@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SavedLogs : MonoBehaviour
 {
@@ -15,7 +16,6 @@ public class SavedLogs : MonoBehaviour
 
     public void SaveLog(Dictionary<float, CordPoint> dataGet) 
     {
-        
         data.Add(new string[] { Stopwatch.timer.ToString(), DateTime.Now.ToString() }, dataGet);
         Debug.LogWarning("Current saved log " + data.Count);
     }
@@ -24,4 +24,6 @@ public class SavedLogs : MonoBehaviour
     {
         return data;
     }
+
+
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using Debug = UnityEngine.Debug;
 
 public class DataManager : MonoBehaviour
@@ -70,8 +71,12 @@ public class DataManager : MonoBehaviour
     {
         newList = true;
         stopwatch.StopTimer();
-        return tempCordList;
+        return new Dictionary<float, CordPoint>(tempCordList);
     }
 
+    public void test() 
+    {
+        tempCordList.Clear();
+    }
 
 }

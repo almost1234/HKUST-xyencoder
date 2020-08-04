@@ -7,6 +7,7 @@ public class SpectateUI : MonoBehaviour
 {
     public Slider timeSlider;
     public float previousSetTime;
+    public Text timeText;
     public List<Dictionary<float, RectTransform>> spectateDotData;
     //The time slider will be linked to function to see the dots at the certain point
     //possibly, the button must send the generatedlist for the Dictionary<float, CordPoint>
@@ -48,6 +49,7 @@ public class SpectateUI : MonoBehaviour
                 }
             }
         }
+        timeText.text = currentTime.ToString();
 
     }
 

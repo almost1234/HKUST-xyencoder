@@ -23,8 +23,8 @@ public class LogsUI : MonoBehaviour
     public void GenerateLogs(Dictionary<string[], Dictionary<float,CordPoint>> dataPoints) 
     {
         DestroyLogs();
-       
-        foreach(KeyValuePair<string[], Dictionary<float,CordPoint>> data in dataPoints) 
+        Debug.LogError("The number of datapoints is " + dataPoints.Count);
+        foreach (KeyValuePair<string[], Dictionary<float,CordPoint>> data in dataPoints) 
         {
             
             logDateText.text = data.Key[1];
@@ -32,11 +32,12 @@ public class LogsUI : MonoBehaviour
             logButton.onClick.AddListener(delegate
             {
                 dotUI.DestroyAllDot();
+                Debug.LogError ("The number of coordinates generated is " + data.Value.Count);
                 foreach (KeyValuePair<float, CordPoint> cord in data.Value)
                 {
                     dotUI.GenerateDot(cord.Key, cord.Value);
                 }
-
+                
                 spectateUI.SpectateButtonSetup(float.Parse(data.Key[0]), new Dictionary<float, RectTransform>(dotUI.getDotList()));
                 LogUI.SetActive(false);
                 FieldUI.SetActive(true);
