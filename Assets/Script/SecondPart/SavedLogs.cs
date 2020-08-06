@@ -10,7 +10,9 @@ public class SavedLogs : MonoBehaviour
 
     private void Awake()
     {
-        data = new Dictionary<string[], Dictionary<float, CordPoint>>();
+        TextAsset textData = Resources.Load<TextAsset>("Text/textFilePath");
+        data = TextAssetTool.CreateCoordinateDictionary(textData.text);
+        //data = new Dictionary<string[], Dictionary<float, CordPoint>>();
         
     }
 

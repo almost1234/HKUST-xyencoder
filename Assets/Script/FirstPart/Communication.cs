@@ -13,15 +13,11 @@ public class Communication : MonoBehaviour
     public static string receivedData;
     public delegate void ReadCord();
     public static event ReadCord callReadCord;
-    private void Awake()
-    {
-        uartData = new SerialPort(portName, baudRate, Parity.None, 8, StopBits.One);
-        if (uartData != null) 
-        {
-            Debug.LogError("There serial port detected!");
-        }
-    }
 
+    public void Start()
+    {
+        uartData = new SerialPort();
+    }
     public string ReadData()
     {
         string varidk = uartData.ReadTo("}") + "}";
@@ -42,5 +38,6 @@ public class Communication : MonoBehaviour
             uartData.Open();
         }
     }
+
 
 }

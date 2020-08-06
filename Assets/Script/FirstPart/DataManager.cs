@@ -42,10 +42,8 @@ public class DataManager : MonoBehaviour
     {
         float xDifference = Mathf.Abs(tempCordList[lastRecordedTime ].x - newCord.x);
         float yDifference = Mathf.Abs(tempCordList[lastRecordedTime ].y - newCord.y);
-        Debug.LogWarning("THE DATA DIFFERS FROM " + xDifference + "," + yDifference);
         if (xDifference >= thresholdDifference || yDifference >= thresholdDifference) 
         {
-            Debug.LogWarning("Entering second check");
             if ((xDifference >= thresholdDifference && yDifference >= thresholdDifference) || generatedNewCord == true)
             {
                 lastRecordedTime = stopwatch.GetTimer();

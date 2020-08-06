@@ -20,6 +20,10 @@ public class LogsUI : MonoBehaviour
     {
         logDateText = log.GetComponentInChildren<Text>();
     }
+    public void Start()
+    {
+        GenerateLogs(savedLogs.GetLog());
+    }
     public void GenerateLogs(Dictionary<string[], Dictionary<float,CordPoint>> dataPoints) 
     {
         DestroyLogs();

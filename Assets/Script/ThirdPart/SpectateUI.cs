@@ -49,7 +49,7 @@ public class SpectateUI : MonoBehaviour
                 }
             }
         }
-        timeText.text = currentTime.ToString();
+        timeText.text = Mathf.RoundToInt(currentTime / 60).ToString() + " : " + Mathf.RoundToInt(currentTime % 60).ToString();
 
     }
 

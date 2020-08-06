@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
+using System;
 
 public class Main : MonoBehaviour
 {
@@ -11,23 +12,26 @@ public class Main : MonoBehaviour
     public CaseSwitch caseSwitch;
     public static Thread readThread;
     public static CordPoint something; 
-    public void Start()
-    {
-        
-        
-    }
-
+    
     public void CallCommunication() 
     {
-        comm.uartData.Open();
-        readThread = new Thread(testFunction);
-        readThread.Start();
+        try
+        {
+            comm.uartData.Open();
+            readThread = new Thread(testFunction);
+            readThread.Start();
+        }
+        catch (Exception e) { Debug.LogError("There no proper COM selected"); }; // insert warning error here
     }
     public void testFunction() 
     {
-        while (comm.uartData.IsOpen) 
-        {
-            something = JsonReader.ConvertToCordPoint(comm.ReadData());
+        try {
+            while (comm.uartData.IsOpen)
+            {
+                something = JsonReader.ConvertToCordPoint(comm.ReadData());
+            }
         }
+        catch(TimeoutException e) { Debug.LogError("The comm didnt send any message, please retry again"); }; // insert warningUI
+        
     }
 }
