@@ -376,6 +376,7 @@ MonoBehaviour:
   timeSlider: {fileID: 1698228832}
   previousSetTime: 0
   timeText: {fileID: 743971182}
+  dotLifetime: 0.5
 --- !u!4 &254095256
 Transform:
   m_ObjectHideFlags: 0

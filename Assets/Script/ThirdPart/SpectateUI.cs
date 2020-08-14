@@ -9,6 +9,7 @@ public class SpectateUI : MonoBehaviour
     public float previousSetTime;
     public Text timeText;
     public List<Dictionary<float, DataPoint>> spectateDotData;
+    public float dotLifetime;
     //The time slider will be linked to function to see the dots at the certain point
     //possibly, the button must send the generatedlist for the Dictionary<float, CordPoint>
 
@@ -32,7 +33,17 @@ public class SpectateUI : MonoBehaviour
         {
             foreach (KeyValuePair<float, DataPoint> data in rectList)
             {
-                data.Value.gameObject.SetActive(data.Key < currentTime ? true : false);
+                if (data.Key < currentTime && currentTime - dotLifetime < data.Key)
+                {
+                    data.Value.gameObject.SetActive(true);
+                    data.Value.SetLineAlpha((dotLifetime - (currentTime - data.Key)) / dotLifetime);
+
+                }
+                else 
+                {
+                    data.Value.gameObject.SetActive(false);
+                }
+                //data.Value.gameObject.SetActive(data.Key < currentTime ? true : false);
                 if (currentTime < previousSetTime)
                 {
                     if (data.Key > previousSetTime)
@@ -72,4 +83,6 @@ public class SpectateUI : MonoBehaviour
     {
         spectateDotData.Clear();
     }
+
+
 }

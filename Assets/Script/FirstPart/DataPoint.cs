@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class DataPoint : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class DataPoint : MonoBehaviour
     public LineRenderer lineRenderer;
     public RectTransform rectTransform;
     public bool initialized = false;
+    public Image dotImage;
+    public Color lineColor = new Color(1, 0, 0, 0);
+    public Color imageColor = new Color(1, 1, 1, 1);
 
     private void Awake() //this shit doesnt work cuz its not active
     {
@@ -22,6 +27,14 @@ public class DataPoint : MonoBehaviour
         coordinate = cord;
     }
 
+    public void SetLineAlpha(float value) 
+    {
+        lineColor.a = value;
+        imageColor.a = value;
+        dotImage.color = imageColor;
+        lineRenderer.startColor = lineColor;
+        lineRenderer.endColor = lineColor;
+    }
     /*public void SetData(CordPoint newCord)  //future set data : need to set the b and actual cord + generation of linerenderer
     {
         coordinate.x = newCord.x;
