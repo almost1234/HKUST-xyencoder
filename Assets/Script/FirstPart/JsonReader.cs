@@ -17,7 +17,7 @@ public class JsonReader : MonoBehaviour
         }
         catch (ArgumentException)
         { Debug.Log("There are some error with the code, dumping it");
-            return new CordPoint(0, 0, 0, 0);
+            return new CordPoint(0, 0, 0, 0, 0 ,0);
         }
     }
    

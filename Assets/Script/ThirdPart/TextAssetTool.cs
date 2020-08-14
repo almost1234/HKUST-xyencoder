@@ -19,26 +19,23 @@ public class TextAssetTool : MonoBehaviour
      */
     public static Dictionary<string[], Dictionary<float, CordPoint>> CreateCoordinateDictionary(string textData)
     {
+        Debug.Log(textData);
         Dictionary<string[], Dictionary<float, CordPoint>> temp = new Dictionary<string[], Dictionary<float, CordPoint>>();
+        if (textData == "") { Debug.LogError("no save file detected!"); return temp; } //terrible
         string[] firstParse = textData.Split('\n');// Seperation for first line (,) to get maxTime, Date, Dictionary<float, CordPoint>
         foreach (string data in firstParse) 
         {
-            Debug.Log(data);
             string[] secondParse = data.Split(',');
-            Debug.LogFormat("Second parse : {0}^{1}^{2}", secondParse);
             string[] initialKey = new string[2] { secondParse[0], secondParse[1] };
             temp.Add(initialKey, new Dictionary<float, CordPoint>());
             string[] thirdParse = secondParse[2].Split(';');// Seperation of second line (;) to get all string of float time + CordPoint in json
             foreach (string cord in thirdParse)
             {
-                Debug.Log(cord);
                 string[] fourthParse = cord.Split(':');// seperation of third line (:) to get the float, JsonCordPoint
-                Debug.LogFormat("{0},{1},{2},{3},{4}", fourthParse);
-                temp[initialKey].Add(float.Parse(fourthParse[0]), new CordPoint(int.Parse(fourthParse[1]), int.Parse(fourthParse[2]), float.Parse(fourthParse[3]), float.Parse(fourthParse[4])));// this too
-            }
-            Debug.Log("DATA ENTERED WITH DATE: " + secondParse[1]);
+                temp[initialKey].Add(float.Parse(fourthParse[0]), new CordPoint(int.Parse(fourthParse[1]), int.Parse(fourthParse[2]), float.Parse(fourthParse[3]), float.Parse(fourthParse[4]), float.Parse(fourthParse[5]), float.Parse(fourthParse[6])));// this too
+            }//This extraction for CordPoint can be dynamiced via json formatting
         } 
-        return temp; //check if it will get referenced or not
+        return temp; 
     }
 
     public static string CreateStringDictionary(Dictionary<string[], Dictionary<float, CordPoint>> data) //this is a very poor way to write, need somebody opinion
@@ -52,16 +49,16 @@ public class TextAssetTool : MonoBehaviour
                 dataLine += text + ','; 
             }
             string cordLine = "";
-            foreach (KeyValuePair<float, CordPoint> cordData in nextData.Value) 
+            foreach (KeyValuePair<float, CordPoint> cordData in nextData.Value)  //It can be dynamiced via forloop + function from cordpoint maybe
             {
-                cordLine += cordData.Key.ToString() + ":" + cordData.Value.type + ":" + cordData.Value.id + ":" + cordData.Value.x + ":" + cordData.Value.y + ";";
+                cordLine += cordData.Key.ToString() + ":" + cordData.Value.type + ":" + cordData.Value.id + ":" + cordData.Value.x1 + ":" + cordData.Value.y1 + ":" + cordData.Value.x2 + ":" + cordData.Value.y2 + ";";
             }
             cordLine = cordLine.Remove(cordLine.Length-1);
             cordLine += "\n";
             temp += dataLine + cordLine;
         }
+        if (temp == null) { Debug.LogError("no file to write detected!"); return temp; }
         temp = temp.Remove(temp.Length - 1);
-        Debug.LogWarning("STRING FORMAT HAS BEEN GENERATED, CONTINUE WRITING - " + data.Count);
         Debug.Log(temp);
         return temp;
     }

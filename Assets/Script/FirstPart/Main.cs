@@ -31,7 +31,12 @@ public class Main : MonoBehaviour
                 something = JsonReader.ConvertToCordPoint(comm.ReadData());
             }
         }
-        catch(TimeoutException e) { Debug.LogError("The comm didnt send any message, please retry again"); }; // insert warningUI
+        catch(TimeoutException e) 
+        {
+            Debug.LogError("The comm didnt send any message, please retry again");
+            comm.uartData = null;
+            readThread.Abort();
+        }; // insert warningUI
         
     }
 }

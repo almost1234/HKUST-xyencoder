@@ -12,6 +12,7 @@ public class LogsUI : MonoBehaviour
     public GameObject log; // prepare a pool for this too
     public SpectateUI spectateUI;
     public Text logDateText;
+    public CaseSwitch caseSwitch;
 
     public GameObject LogUI;
     public GameObject FieldUI;
@@ -41,10 +42,9 @@ public class LogsUI : MonoBehaviour
                 {
                     dotUI.GenerateDot(cord.Key, cord.Value);
                 }
+                caseSwitch.ChangeUI(uiState.specUI);
+                spectateUI.SpectateButtonSetup(float.Parse(data.Key[0]), new Dictionary<float, DataPoint>(dotUI.getDotList()));
                 
-                spectateUI.SpectateButtonSetup(float.Parse(data.Key[0]), new Dictionary<float, RectTransform>(dotUI.getDotList()));
-                LogUI.SetActive(false);
-                FieldUI.SetActive(true);
                 Debug.LogWarning("Called replay: " + data.Key[1]);
                 //provide the data and point it was generated?
             }

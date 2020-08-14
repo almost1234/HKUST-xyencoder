@@ -40,8 +40,8 @@ public class DataManager : MonoBehaviour
 
     public void ComparePreviousCord(CordPoint newCord) 
     {
-        float xDifference = Mathf.Abs(tempCordList[lastRecordedTime ].x - newCord.x);
-        float yDifference = Mathf.Abs(tempCordList[lastRecordedTime ].y - newCord.y);
+        float xDifference = Mathf.Abs(tempCordList[lastRecordedTime ].x1 - newCord.x1);
+        float yDifference = Mathf.Abs(tempCordList[lastRecordedTime ].y1 - newCord.y1);
         if (xDifference >= thresholdDifference || yDifference >= thresholdDifference) 
         {
             if ((xDifference >= thresholdDifference && yDifference >= thresholdDifference) || generatedNewCord == true)

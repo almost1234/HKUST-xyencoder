@@ -11,8 +11,10 @@ public class CaseSwitch : MonoBehaviour
     public Communication comm;
     public LogsUI logsUI;
 
-    public GameObject ReadUI;
-    public GameObject LogUI;
+    public GameObject fieldUI;
+    public GameObject commUI;
+    public GameObject specUI;
+    public GameObject logUI;
     private void Awake()
     {
         Communication.callReadCord += ReadCordId;
@@ -20,7 +22,8 @@ public class CaseSwitch : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (comm.uartData.IsOpen) 
+        
+        if (comm.uartData != null && comm.uartData.IsOpen) 
         {
             ReadCordId();
         }
@@ -55,22 +58,32 @@ public class CaseSwitch : MonoBehaviour
         
     }
 
-    public void ChangeUI(int insertEnum) 
+    public void ChangeUI(uiState state) 
     {
-        switch (insertEnum) 
+        switch (state) 
         {
-            case 0:
-                LogUI.SetActive(true);
-                ReadUI.SetActive(false);
+            case uiState.commUI:
+                fieldUI.SetActive(true);
+                logUI.SetActive(false);
+                commUI.SetActive(true);
+                specUI.SetActive(false);
                 break;
-            case 1:
-                ReadUI.SetActive(true);
-                ReadUI.SetActive(false);
+            case uiState.logsUI:
+                fieldUI.SetActive(false);
+                logUI.SetActive(true);
                 break;
-            case 2:
-                //insert change to SpectateUI
+            case uiState.specUI:
+                fieldUI.SetActive(true);
+                logUI.SetActive(false);
+                commUI.SetActive(false);
+                specUI.SetActive(true);
                 break;
         } 
 
     }
+}
+
+public enum uiState 
+{
+    commUI, logsUI, specUI
 }

@@ -8,14 +8,14 @@ public class SpectateUI : MonoBehaviour
     public Slider timeSlider;
     public float previousSetTime;
     public Text timeText;
-    public List<Dictionary<float, RectTransform>> spectateDotData;
+    public List<Dictionary<float, DataPoint>> spectateDotData;
     //The time slider will be linked to function to see the dots at the certain point
     //possibly, the button must send the generatedlist for the Dictionary<float, CordPoint>
 
     public void Awake()
     {
         timeSlider.onValueChanged.AddListener(UpdateSpectateUI);
-        spectateDotData = new List<Dictionary<float, RectTransform>>();
+        spectateDotData = new List<Dictionary<float, DataPoint>>();
 
     }
     public void SetMaxValue(float time)
@@ -28,9 +28,9 @@ public class SpectateUI : MonoBehaviour
 
     public void UpdateSpectateUI(float currentTime)
     {
-        foreach (Dictionary<float, RectTransform> rectList in spectateDotData)
+        foreach (Dictionary<float, DataPoint> rectList in spectateDotData)
         {
-            foreach (KeyValuePair<float, RectTransform> data in rectList)
+            foreach (KeyValuePair<float, DataPoint> data in rectList)
             {
                 data.Value.gameObject.SetActive(data.Key < currentTime ? true : false);
                 if (currentTime < previousSetTime)
@@ -53,12 +53,12 @@ public class SpectateUI : MonoBehaviour
 
     }
 
-    public void SetDotList(Dictionary<float, RectTransform> data)
+    public void SetDotList(Dictionary<float, DataPoint> data)
     {
         spectateDotData.Add(data);
     }
 
-    public void SpectateButtonSetup(float time, Dictionary<float, RectTransform> dotGroup)
+    public void SpectateButtonSetup(float time, Dictionary<float, DataPoint> dotGroup)
     {
         SetMaxValue(time);
         if (dotGroup == null)

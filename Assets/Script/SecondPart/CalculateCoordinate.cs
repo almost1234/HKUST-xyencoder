@@ -20,15 +20,18 @@ public class CalculateCoordinate : MonoBehaviour
     }
     public Vector2 ConvertToRedCord(CordPoint cord) 
     {
-        float xCord = ((cord.x / realWidth) * redAreaSize.x) - (redAreaSize.x/2) ;
-        float yCord = ((cord.y/ realHeight) * redAreaSize.y)-(redAreaSize.y / 2);
+        Debug.Log("THE CORD IS " + cord.x1 + "/" + cord.y1);
+        float xCord = ((cord.x1 / realWidth) * redAreaSize.x) - (redAreaSize.x/2) ;
+        float yCord = ((cord.y1/ realHeight) * redAreaSize.y)-(redAreaSize.y / 2);
+        Debug.Log("THE CORD IS " + xCord + "/" + yCord);
         return new Vector2(xCord, yCord);
     }
 
     public Vector2 ConvertToBlueCord(CordPoint cord) 
     {
-        float xCord = (-(cord.x / realWidth) * blueAreaSize.x) + (blueAreaSize.x / 2);
-        float yCord = ((cord.y / realHeight) * blueAreaSize.y) - (blueAreaSize.y / 2);
+        Debug.Log("THE CORD IS " + cord.x1 + "/" + cord.y1);
+        float xCord = (-(cord.x1 / realWidth) * blueAreaSize.x) + (blueAreaSize.x / 2);
+        float yCord = ((cord.y1 / realHeight) * blueAreaSize.y) - (blueAreaSize.y / 2);
         return new Vector2(xCord, yCord);
     }
 
