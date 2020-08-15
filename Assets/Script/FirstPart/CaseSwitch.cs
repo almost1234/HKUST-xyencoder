@@ -10,6 +10,9 @@ public class CaseSwitch : MonoBehaviour
     public SavedLogs savedLogs;
     public Communication comm;
     public LogsUI logsUI;
+    public TestDotUI testDotUI;
+    public SpectateUI spectateUI;
+
 
     public GameObject fieldUI;
     public GameObject commUI;
@@ -67,10 +70,13 @@ public class CaseSwitch : MonoBehaviour
                 logUI.SetActive(false);
                 commUI.SetActive(true);
                 specUI.SetActive(false);
+                testDotUI.DestroyAllDot();
                 break;
             case uiState.logsUI:
                 fieldUI.SetActive(false);
                 logUI.SetActive(true);
+                testDotUI.DestroyAllDot();
+                spectateUI.ClearDotList();
                 break;
             case uiState.specUI:
                 fieldUI.SetActive(true);
@@ -80,6 +86,16 @@ public class CaseSwitch : MonoBehaviour
                 break;
         } 
 
+    }
+
+    public void BackToField() //lazy temp func
+    {
+        ChangeUI(uiState.logsUI);
+    }
+
+    public void BackToComm() 
+    {
+        ChangeUI(uiState.commUI);
     }
 }
 

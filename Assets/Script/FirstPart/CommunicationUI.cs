@@ -7,15 +7,19 @@ using UnityEngine.UI;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.IO;
+using UnityEngine.Experimental.PlayerLoop;
 
 public class CommunicationUI : MonoBehaviour
 {
     public Dropdown selectComm;
     public Communication comm;
+    public delegate void CallErrorUI(string text);
+    public static event CallErrorUI addErrorMessage;
 
     public void Awake()
     {
         selectComm.onValueChanged.AddListener(OnUpdateDropdown);
+        UpdateCommOptions();
     }
 
     public void UpdateCommOptions() 
@@ -34,28 +38,34 @@ public class CommunicationUI : MonoBehaviour
         comm.portName = selectComm.options[value].text;
         SerialPort test = new SerialPort(comm.portName, comm.baudRate, Parity.None, 8, StopBits.One);
         test.ReadTimeout = 500;
-        try { test.Open(); }
-        catch (IOException e)
-        {
-            Debug.LogWarning("The specified port does not exist!");// iinsert warning Retry port again
-            return;
+        try 
+        { 
+            test.Open();
+            test.ReadTo("}");
         }
-        try { test.ReadTo("}"); }
-        catch (TimeoutException e)
+        catch (Exception e)
         {
-            Debug.LogWarning("The comm doesnt receive any data please choose another one");
-            test.Close();
-            return;
-        }
-        catch (IOException e) 
-        {
-            Debug.LogWarning("The specified port does not exist!");
+            Debug.LogError("The error is " + e.ToString());
+            switch (e.GetType().ToString()) 
+            {
+                case "System.TimeoutException":
+                    SendErrorMessage("The comm doesnt receive any data please choose another one");
+                    break;
+                case "System.IO.IOException":
+                    SendErrorMessage("The specified port does not exist!");
+                    break;
+            }
             test.Close();
             return;
         }
         Debug.Log(comm.portName + " is receiving the JSON value, using...");
         comm.uartData = test;
         test.Close();
+    }
+
+    public void SendErrorMessage(string text) 
+    {
+        addErrorMessage?.Invoke(text);
     }
 
 

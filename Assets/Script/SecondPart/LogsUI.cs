@@ -44,6 +44,7 @@ public class LogsUI : MonoBehaviour
                 }
                 caseSwitch.ChangeUI(uiState.specUI);
                 spectateUI.SpectateButtonSetup(float.Parse(data.Key[0]), new Dictionary<float, DataPoint>(dotUI.getDotList()));
+                spectateUI.UpdateSpectateUI(float.Parse(data.Key[0])); // call once just to update the shit
                 
                 Debug.LogWarning("Called replay: " + data.Key[1]);
                 //provide the data and point it was generated?
