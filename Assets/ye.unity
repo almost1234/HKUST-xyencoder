@@ -680,7 +680,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1442152494}
+      - m_Target: {fileID: 657947060}
         m_MethodName: CallCommunication
         m_Mode: 1
         m_Arguments:

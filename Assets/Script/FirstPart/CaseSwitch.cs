@@ -46,7 +46,7 @@ public class CaseSwitch : MonoBehaviour
                         dataManager.ReceiveCord(Main.something);
                         break; //Data is added to the DataMananger for checking + inserting purposes
                     case 2:
-                        Main.readThread.Abort();
+                        Communication.AbortComm();
                         comm.ChangePortState();
                         savedLogs.SaveLog(dataManager.SendTempCordList());
                         logsUI.GenerateLogs(savedLogs.GetLog());
