@@ -6,23 +6,23 @@ using UnityEngine.Rendering;
 
 public class SavedLogs : MonoBehaviour
 {
-    Dictionary<string[], Dictionary<float, CordPoint>> data;
+    Dictionary<string, List<CordPoint>> data;
 
     private void Awake()
     {
         TextAsset textData = Resources.Load<TextAsset>("Text/textFilePath");
         data = TextAssetTool.CreateCoordinateDictionary(textData.text);
-        //data = new Dictionary<string[], Dictionary<float, CordPoint>>();
-        
+        //data = new Dictionary<string, List<CordPoint>>();
+
     }
 
-    public void SaveLog(Dictionary<float, CordPoint> dataGet) 
+    public void SaveLog(List<CordPoint> dataGet) 
     {
-        data.Add(new string[] { Stopwatch.timer.ToString(), DateTime.Now.ToString() }, dataGet);
+        data.Add(DateTime.Now.ToString(), dataGet);
         Debug.LogWarning("Current saved log " + data.Count);
     }
 
-    public Dictionary<string[], Dictionary<float,CordPoint>> GetLog() 
+    public Dictionary<string, List<CordPoint>> GetLog() 
     {
         return data;
     }

@@ -16,9 +16,11 @@ public class Communication : MonoBehaviour
     public static event ReadCord callReadCord;
     public static Thread readThread;
 
+    public int tempTimer;
     public void Start()
     {
         uartData = new SerialPort();
+        tempTimer = 0;
     }
     public static void AbortComm() 
     {
@@ -40,8 +42,12 @@ public class Communication : MonoBehaviour
         {
             while (uartData.IsOpen)
             {
-                Main.something = JsonReader.ConvertToCordPoint(ReadData());
-                readThread.Suspend();
+                if (tempTimer == 1000)
+                {
+                    Main.something = JsonReader.ConvertToCordPoint(ReadData());
+                    tempTimer = 0;
+                }
+                else { tempTimer++; }
             }
         }
         catch (TimeoutException e)

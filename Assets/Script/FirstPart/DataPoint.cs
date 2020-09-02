@@ -17,7 +17,7 @@ public class DataPoint : MonoBehaviour
 
     private void Awake() //this shit doesnt work cuz its not active
     {
-        coordinate = new CordPoint(0, 0, 0, 0, 0, 0);
+        //questioning the legitamacy of this bullshit
         lineRenderer = gameObject.GetComponent<LineRenderer>();
         rectTransform = gameObject.GetComponent<RectTransform>();
     }
@@ -58,8 +58,11 @@ public struct CordPoint
     public float y1;
     public float x2;
     public float y2;
+    public float velocity;
+    public float expectedVelocity;
+    public float time;
 
-    public CordPoint(int type, int id, float xCord, float yCord, float xCordB, float yCordB) 
+    public CordPoint(int type, int id, float xCord, float yCord, float xCordB, float yCordB, float velocity, float expectedVelocity, float time) 
     {
         this.type = type;
         this.id = id;
@@ -67,5 +70,8 @@ public struct CordPoint
         this.y1 = yCord;
         this.x2 = xCordB;
         this.y2 = yCordB;
+        this.velocity = velocity;
+        this.expectedVelocity = expectedVelocity;
+        this.time = time;
     }
 }

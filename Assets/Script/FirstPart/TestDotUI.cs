@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestDotUI : MonoBehaviour
 {
-    public Dictionary<float, DataPoint> dotList;
+    public List<DataPoint> dotList;
     public GameObject sampleDotGenerate;
     public CalculateCoordinate calCord;
     public Transform RedGroup;
@@ -12,9 +12,9 @@ public class TestDotUI : MonoBehaviour
 
     public void Awake()
     {
-        dotList = new Dictionary<float, DataPoint>();
+        dotList = new List<DataPoint>();
     }
-    public void GenerateDot(float time, CordPoint cordPoint)//add dual function in the future //improve more you know how shit it is
+    public void GenerateDot(CordPoint cordPoint)//add dual function in the future //improve more you know how shit it is
     {   
         DataPoint dotVar = Instantiate(sampleDotGenerate, RedGroup).GetComponent<DataPoint>();
         dotVar.SetCord(cordPoint);
@@ -30,18 +30,19 @@ public class TestDotUI : MonoBehaviour
                 dotVar.SetData(calCord.ConvertToBlueCord(cordPoint), new Vector3[2] { directionLine, new Vector3(0, 0, 0) });
                 break;
         }
-        dotList.Add(time, dotVar);
+        dotList.Add(dotVar);
     }
 
-    public Dictionary<float, DataPoint> getDotList() 
+    public List<DataPoint> getDotList() 
     {
+        Debug.Log("there is " + dotList.Count + " coordinates");
         return dotList;
     }
     public void DestroyAllDot() //temp func, switch to poolable when done
     {
-        foreach (KeyValuePair<float, DataPoint> dot in dotList) 
+        foreach (DataPoint dot in dotList) 
         {
-            Destroy(dot.Value.gameObject);
+            Destroy(dot.gameObject);
         }
         dotList.Clear();
     }

@@ -8,7 +8,7 @@ public class SpectateUI : MonoBehaviour
     public Slider timeSlider;
     public float previousSetTime;
     public Text timeText;
-    public List<Dictionary<float, DataPoint>> spectateDotData;
+    public List<DataPoint> spectateDotData;
     public float dotLifetime;
     //The time slider will be linked to function to see the dots at the certain point
     //possibly, the button must send the generatedlist for the Dictionary<float, CordPoint>
@@ -16,7 +16,7 @@ public class SpectateUI : MonoBehaviour
     public void Awake()
     {
         timeSlider.onValueChanged.AddListener(UpdateSpectateUI);
-        spectateDotData = new List<Dictionary<float, DataPoint>>();
+        spectateDotData = new List<DataPoint>();
 
     }
     public void SetMaxValue(float time)
@@ -29,49 +29,52 @@ public class SpectateUI : MonoBehaviour
 
     public void UpdateSpectateUI(float currentTime)
     {
-        foreach (Dictionary<float, DataPoint> rectList in spectateDotData)
-        {
-            foreach (KeyValuePair<float, DataPoint> data in rectList)
+        
+            foreach (DataPoint data in spectateDotData)
             {
-                if (data.Key < currentTime && currentTime - dotLifetime < data.Key)
+                if (data.coordinate.time < currentTime && currentTime - dotLifetime < data.coordinate.time) // if the dot is in range of currentTime and dotLifeTime
                 {
-                    data.Value.gameObject.SetActive(true);
-                    data.Value.SetLineAlpha((dotLifetime - (currentTime - data.Key)) / dotLifetime);
+                    data.gameObject.SetActive(true);
+                    data.SetLineAlpha((dotLifetime - (currentTime - data.coordinate.time)) / dotLifetime);
 
                 }
                 else 
                 {
-                    data.Value.gameObject.SetActive(false);
+                    data.gameObject.SetActive(false);
                 }
                 //data.Value.gameObject.SetActive(data.Key < currentTime ? true : false);
-                if (currentTime < previousSetTime)
-                {
-                    if (data.Key > previousSetTime)
+                if (currentTime < previousSetTime) //To break the dotcheck earlier (Since this is listed now, i can technically use index to point which dot to which dot for performance)
+                {   //if the currentTime is smaller than previous time, check if the dot has surpassed previous time
+                    if (data.coordinate.time > previousSetTime) // U need to update until the previousSetTime at least
                     {
+                        previousSetTime = data.coordinate.time;
                         break;
                     }
                 }
                 else
                 {
-                    if (data.Key > currentTime)
+                    //if the currentTime larger than previous time, check if the dot has surpassed currentTime
+                    if (data.coordinate.time > currentTime)
                     {
+                        previousSetTime = data.coordinate.time;
                         break;
                     }
                 }
             }
-        }
+        //TODO: Steven of the past, I really dont know how you can update the previousSetTime, i feel like you never tested this feature since u dont feel the lag
+        //So Imma just add some time stuff to update it at least
         timeText.text = Mathf.RoundToInt(currentTime / 60).ToString() + " : " + Mathf.RoundToInt(currentTime % 60).ToString();
 
     }
 
-    public void SetDotList(Dictionary<float, DataPoint> data)
+    public void SetDotList(List<DataPoint> data)
     {
-        spectateDotData.Add(data);
+        spectateDotData =  data;
     }
 
-    public void SpectateButtonSetup(float time, Dictionary<float, DataPoint> dotGroup)
+    public void SpectateButtonSetup(List<DataPoint> dotGroup)
     {
-        SetMaxValue(time);
+        SetMaxValue(dotGroup[dotGroup.Count -1].coordinate.time);
         if (dotGroup == null)
         {
             Debug.LogWarning("THERE NO FUKIN data");

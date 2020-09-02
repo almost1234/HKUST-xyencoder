@@ -18,10 +18,10 @@ public class CaseSwitch : MonoBehaviour
     public GameObject commUI;
     public GameObject specUI;
     public GameObject logUI;
-    private void Awake()
-    {
-        Communication.callReadCord += ReadCordId;
-    }
+    public GameObject LineUI;
+
+    public delegate void UpdateCordData(CordPoint data);
+    public static event UpdateCordData OnUpdateCordData;
 
     public void FixedUpdate()
     {
@@ -36,14 +36,16 @@ public class CaseSwitch : MonoBehaviour
         
         if (comm.uartData.IsOpen) 
         {
-            try
+            //try
             {
                 switch (Main.something.id)
                 {
                     case 0:
                         break; //Data is thrown as its not needed
                     case 1:
-                        dataManager.ReceiveCord(Main.something);
+                        Debug.Log("Case1");
+                        OnUpdateCordData?.Invoke(Main.something);
+                        //dataManager.ReceiveCord(Main.something);
                         break; //Data is added to the DataMananger for checking + inserting purposes
                     case 2:
                         Communication.AbortComm();
@@ -54,7 +56,7 @@ public class CaseSwitch : MonoBehaviour
                         break; //Data is thrown, and all state is resetted
                 }
             }
-            catch (System.Exception e) { Debug.Log("No Data Detected"); }
+            //catch (System.Exception e) { Debug.Log("No Data Detected"); }
         }
             
         
@@ -63,18 +65,20 @@ public class CaseSwitch : MonoBehaviour
 
     public void ChangeUI(uiState state) 
     {
-        switch (state) 
+        switch (state) //please simplify this in the future
         {
             case uiState.commUI:
                 fieldUI.SetActive(true);
                 logUI.SetActive(false);
                 commUI.SetActive(true);
                 specUI.SetActive(false);
+                LineUI.SetActive(false);
                 testDotUI.DestroyAllDot();
                 break;
             case uiState.logsUI:
                 fieldUI.SetActive(false);
                 logUI.SetActive(true);
+                LineUI.SetActive(false);
                 testDotUI.DestroyAllDot();
                 spectateUI.ClearDotList();
                 break;
@@ -83,6 +87,7 @@ public class CaseSwitch : MonoBehaviour
                 logUI.SetActive(false);
                 commUI.SetActive(false);
                 specUI.SetActive(true);
+                LineUI.SetActive(true);
                 break;
         } 
 
