@@ -10,7 +10,10 @@ public class DynamicLineGraph : LineGraph
 {
     public List<CordPoint> bufferData;
     public int bufferThreshold;
+    public int ticksThreshold;
     public LineGraphDataSelection currentSelection = LineGraphDataSelection.velocity;
+
+    public int ticks = 0;
     public void Awake()
     {
         CaseSwitch.OnUpdateCordData += UpdateBufferList;
@@ -18,7 +21,12 @@ public class DynamicLineGraph : LineGraph
 
     public void FixedUpdate()
     {
-        UpdateLineRenderer(currentSelection);
+        if (ticks == ticksThreshold)
+        {
+            UpdateLineRenderer(currentSelection);
+            ticks = 0;
+        }
+        else { ticks++; }
     }
     public void UpdateBufferList(CordPoint data) 
     {

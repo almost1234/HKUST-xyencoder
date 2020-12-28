@@ -17,7 +17,9 @@ public class LineGraph : MonoBehaviour
     public RectTransform graph;
     public Vector2 graphCord;
     public float maxXValue;
+    public float minXValue;
     public float maxYValue;
+    public float minYValue;
     public float roofBuffer;
 
     public List<Vector3[]> dataCompiled = new List<Vector3[]>();
@@ -86,7 +88,9 @@ public class LineGraph : MonoBehaviour
         int numberOfData = data.Count;
         Vector3[] realDataCompiled = new Vector3[numberOfData];
         Vector3[] acutalDataCompiled = new Vector3[numberOfData];
+        minXValue = data[0].time;
         maxXValue = data[numberOfData - 1].time;
+        minYValue = data[0].velocity < data[0].expectedVelocity ? data[0].velocity : data[0].expectedVelocity;
         maxYValue = data[numberOfData - 1].velocity > data[numberOfData - 1].expectedVelocity ? data[numberOfData - 1].velocity : data[numberOfData - 1].expectedVelocity;
         for (int i = 0; i < numberOfData; i++)
         {
@@ -102,7 +106,9 @@ public class LineGraph : MonoBehaviour
         int numberOfData = data.Count;
         Vector3[] realDataCompiled = new Vector3[numberOfData];
         Vector3[] acutalDataCompiled = new Vector3[numberOfData];
+        minXValue = data[0].x1 < data[0].x2 ? data[0].x1 : data[0].x2;
         maxXValue = data[numberOfData - 1].x1 > data[numberOfData - 1].x2 ? data[numberOfData - 1].x1 : data[numberOfData - 1].x2;
+        minYValue = data[0].y1 < data[0].y2 ? data[0].y1 : data[0].y2;
         maxYValue = data[numberOfData - 1].y1 > data[numberOfData - 1].y2 ? data[numberOfData - 1].y1 : data[numberOfData - 1].y2;
         for (int i = 0; i < numberOfData; i++)
         {
@@ -118,7 +124,9 @@ public class LineGraph : MonoBehaviour
         int numberOfData = data.Count;
         Vector3[] realDataCompiled = new Vector3[numberOfData];
         Vector3[] acutalDataCompiled = new Vector3[numberOfData];
+        minXValue = data[0].time;
         maxXValue = data[numberOfData - 1].time;
+        minYValue = data[0].x1 < data[0].x2 ? data[0].x1 : data[0].x2;
         maxYValue = data[numberOfData - 1].x1 > data[numberOfData - 1].x2 ? data[numberOfData - 1].x1 : data[numberOfData - 1].x2;
         for (int i = 0; i < numberOfData; i++)
         {
@@ -134,7 +142,9 @@ public class LineGraph : MonoBehaviour
         int numberOfData = data.Count;
         Vector3[] realDataCompiled = new Vector3[numberOfData];
         Vector3[] acutalDataCompiled = new Vector3[numberOfData];
+        minXValue = data[0].time;
         maxXValue = data[numberOfData - 1].time;
+        maxYValue = data[0].y1 < data[0].y2 ? data[0].y1 : data[0].y2;
         maxYValue = data[numberOfData - 1].y1 > data[numberOfData - 1].y2 ? data[numberOfData - 1].y1 : data[numberOfData - 1].y2;
         for (int i = 0; i < numberOfData; i++)
         {
@@ -159,12 +169,12 @@ public class LineGraph : MonoBehaviour
 
     public float AdjustXCord(float data)
     {
-        return (data / maxXValue) * graphCord.x - (graphCord.x / 2);
+        return ((data - minXValue) / (maxXValue - minXValue)) * graphCord.x - (graphCord.x / 2);
     }
 
     public float AdjustYCord(float data) 
     {
-        return (data / maxYValue) * graphCord.y - (graphCord.y / 2);
+        return ((data - minYValue) / (maxYValue - minYValue)) * graphCord.y - (graphCord.y / 2);
     }
 
     public void CaseSwitchLineRenderer(LineGraphDataSelection selection) 
