@@ -11,11 +11,14 @@ using System.IO;
 public class CommunicationUI : MonoBehaviour
 {
     public Dropdown selectComm;
-    public Communication comm;
+
+    public Dropdown selectBaud;
+    private int baudRate = 9600;
 
     public void Awake()
     {
         selectComm.onValueChanged.AddListener(OnUpdateDropdown);
+        selectBaud.onValueChanged.AddListener(UpdateBaudOption);
     }
 
     public void UpdateCommOptions() 
@@ -29,10 +32,16 @@ public class CommunicationUI : MonoBehaviour
         selectComm.AddOptions(commOption);
     }
 
+    private void UpdateBaudOption(int value)
+    {
+        baudRate = int.Parse(selectBaud.options[value].text);
+        Debug.Log("Current Baud rate is selected at " + baudRate);
+    }
+
     public void OnUpdateDropdown(int value) 
     {
-        comm.portName = selectComm.options[value].text;
-        SerialPort test = new SerialPort(comm.portName, comm.baudRate, Parity.None, 8, StopBits.One);
+        string portName = selectComm.options[value].text;
+        SerialPort test = new SerialPort(portName, baudRate, Parity.None, 8, StopBits.One);
         test.ReadTimeout = 500;
         try { test.Open(); }
         catch (IOException e)
@@ -53,8 +62,8 @@ public class CommunicationUI : MonoBehaviour
             test.Close();
             return;
         }
-        Debug.Log(comm.portName + " is receiving the JSON value, using...");
-        comm.uartData = test;
+        Debug.Log(portName + " is receiving the JSON value, using...");
+        Communication.Instance.uartData = test;
         test.Close();
     }
 

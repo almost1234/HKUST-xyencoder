@@ -13,9 +13,9 @@ public class CaseSwitch : MonoBehaviour
 
     public GameObject ReadUI;
     public GameObject LogUI;
-    private void Awake()
+    private void Start()
     {
-        Communication.callReadCord += ReadCordId;
+        comm = Communication.Instance;
     }
 
     public void FixedUpdate()
@@ -32,19 +32,18 @@ public class CaseSwitch : MonoBehaviour
         {
             try
             {
-                switch (Main.something.id)
+                switch (comm.convertedData.id)
                 {
                     case 0:
                         break; //Data is thrown as its not needed
                     case 1:
-                        dataManager.ReceiveCord(Main.something);
+                        dataManager.ReceiveCord(comm.convertedData);
                         break; //Data is added to the DataMananger for checking + inserting purposes
                     case 2:
-                        Main.readThread.Abort();
-                        comm.ChangePortState();
+                        comm.StopReadingData();
                         savedLogs.SaveLog(dataManager.SendTempCordList());
                         logsUI.GenerateLogs(savedLogs.GetLog());
-                        Main.something.id = 0;
+                        //Main.something.id = 0; this shouldnt matter
                         break; //Data is thrown, and all state is resetted
                 }
             }
