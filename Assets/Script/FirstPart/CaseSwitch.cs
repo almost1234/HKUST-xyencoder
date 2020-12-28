@@ -50,8 +50,6 @@ public class CaseSwitch : MonoBehaviour
             catch (System.Exception e) { Debug.Log("No Data Detected"); }
         }
             
-        
-        
     }
 
     public void ChangeUI(int insertEnum) 

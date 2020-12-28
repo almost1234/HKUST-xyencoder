@@ -33,5 +33,5 @@ public class Main : MonoBehaviour
     //    }
     //    catch(TimeoutException e) { Debug.LogError("The comm didnt send any message, please retry again"); }; // insert warningUI
         
-    }
+    //}
 }

@@ -11,14 +11,15 @@ using System.IO;
 public class CommunicationUI : MonoBehaviour
 {
     public Dropdown selectComm;
-
     public Dropdown selectBaud;
+    public Image CommIndicator;
     private int baudRate = 9600;
 
     public void Awake()
     {
         selectComm.onValueChanged.AddListener(OnUpdateDropdown);
         selectBaud.onValueChanged.AddListener(UpdateBaudOption);
+       
     }
 
     public void UpdateCommOptions() 
@@ -38,8 +39,14 @@ public class CommunicationUI : MonoBehaviour
         Debug.Log("Current Baud rate is selected at " + baudRate);
     }
 
+    private void UpdateIndicator()
+    {
+        CommIndicator.color = Communication.Instance.uartData == null ? Color.red : Color.green;
+    }
+
     public void OnUpdateDropdown(int value) 
     {
+        Communication.Instance.uartData = null; //to ensure every change must be correct to do so
         string portName = selectComm.options[value].text;
         SerialPort test = new SerialPort(portName, baudRate, Parity.None, 8, StopBits.One);
         test.ReadTimeout = 500;
