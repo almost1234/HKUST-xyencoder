@@ -11,11 +11,12 @@ public class LogsUI : MonoBehaviour
     public List<Transform> logsGroupList; //poolsite
     public GameObject log; // prepare a pool for this too
     public SpectateUI spectateUI;
+    public LineGraph lineGraph;
     public Text logDateText;
+    public CaseSwitch caseSwitch;
 
     public GameObject LogUI;
     public GameObject FieldUI;
-
     public void Awake()
     {
         logDateText = log.GetComponentInChildren<Text>();
@@ -23,29 +24,35 @@ public class LogsUI : MonoBehaviour
     public void Start()
     {
         GenerateLogs(savedLogs.GetLog());
+        if (lineGraph == null) 
+        {
+            Debug.LogWarning("NO LINE");
+        }
     }
-    public void GenerateLogs(Dictionary<string[], Dictionary<float,CordPoint>> dataPoints) 
+    public void GenerateLogs(Dictionary<string, List<CordPoint>> dataPoints) 
     {
         DestroyLogs();
         Debug.LogError("The number of datapoints is " + dataPoints.Count);
-        foreach (KeyValuePair<string[], Dictionary<float,CordPoint>> data in dataPoints) 
+        foreach (KeyValuePair<string, List<CordPoint>> data in dataPoints) 
         {
             
-            logDateText.text = data.Key[1];
+            logDateText.text = data.Key;
             Button logButton = Instantiate(log, logsGroup).GetComponent<Button>();
             logButton.onClick.AddListener(delegate
             {
                 dotUI.DestroyAllDot();
-                Debug.LogError ("The number of coordinates generated is " + data.Value.Count);
-                foreach (KeyValuePair<float, CordPoint> cord in data.Value)
+                foreach (CordPoint cord in data.Value)
                 {
-                    dotUI.GenerateDot(cord.Key, cord.Value);
+                    dotUI.GenerateDot(cord);
                 }
+                caseSwitch.ChangeUI(uiState.specUI);
+                float tempTime = data.Value[data.Value.Count - 1].time;
+                Debug.LogError("THE TIME VALUE EXIST WITH " + tempTime);
+                spectateUI.SpectateButtonSetup(new List<DataPoint>(dotUI.getDotList())); //this kinda need a bitta rework
+                lineGraph.CompileAllDataType(new List<CordPoint>(data.Value));//Need to make a delegate with spectate for readability
+                spectateUI.UpdateSpectateUI(tempTime); // call once just to update the shit
                 
-                spectateUI.SpectateButtonSetup(float.Parse(data.Key[0]), new Dictionary<float, RectTransform>(dotUI.getDotList()));
-                LogUI.SetActive(false);
-                FieldUI.SetActive(true);
-                Debug.LogWarning("Called replay: " + data.Key[1]);
+                Debug.LogWarning("Called replay: " + data.Key);
                 //provide the data and point it was generated?
             }
             );

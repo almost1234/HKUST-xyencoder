@@ -1,18 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class dictionaryButton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public LineRenderer testLine;
+    public Color something = new Color(1,0,0,0.2f);
+    public void test() 
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        something.a = 1;
+        Vector3[] testPos = new Vector3[] { new Vector3(100, 100, 0), new Vector3(0, 0, 0) };
+        testLine.SetPositions(testPos);
+        testLine.startColor = something;
+        testLine.endColor = something;
     }
 }

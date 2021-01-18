@@ -17,51 +17,44 @@ public class TextAssetTool : MonoBehaviour
     /*<summary>
      Data format : maxTime, Date, cordTime1 : type: id: x: y ; cordTime2 : type : id: x: y ; cordTime3 : type: id: x: y and so on \n 
      */
-    public static Dictionary<string[], Dictionary<float, CordPoint>> CreateCoordinateDictionary(string textData)
+    public static Dictionary<string, List< CordPoint>> CreateCoordinateDictionary(string textData)
     {
-        Dictionary<string[], Dictionary<float, CordPoint>> temp = new Dictionary<string[], Dictionary<float, CordPoint>>();
+        Debug.Log(textData);
+        Dictionary<string, List< CordPoint>> temp = new Dictionary<string, List< CordPoint>>();
+        if (textData == "") { Debug.LogError("no save file detected!"); return temp; } //terrible
         string[] firstParse = textData.Split('\n');// Seperation for first line (,) to get maxTime, Date, Dictionary<float, CordPoint>
         foreach (string data in firstParse) 
         {
-            Debug.Log(data);
             string[] secondParse = data.Split(',');
-            Debug.LogFormat("Second parse : {0}^{1}^{2}", secondParse);
-            string[] initialKey = new string[2] { secondParse[0], secondParse[1] };
-            temp.Add(initialKey, new Dictionary<float, CordPoint>());
-            string[] thirdParse = secondParse[2].Split(';');// Seperation of second line (;) to get all string of float time + CordPoint in json
+            temp.Add(secondParse[0], new List<CordPoint>());
+            string[] thirdParse = secondParse[1].Split(';');// Seperation of second line (;) to get all string of float time + CordPoint in json
             foreach (string cord in thirdParse)
             {
-                Debug.Log(cord);
                 string[] fourthParse = cord.Split(':');// seperation of third line (:) to get the float, JsonCordPoint
-                Debug.LogFormat("{0},{1},{2},{3},{4}", fourthParse);
-                temp[initialKey].Add(float.Parse(fourthParse[0]), new CordPoint(int.Parse(fourthParse[1]), int.Parse(fourthParse[2]), float.Parse(fourthParse[3]), float.Parse(fourthParse[4])));// this too
-            }
-            Debug.Log("DATA ENTERED WITH DATE: " + secondParse[1]);
+                temp[secondParse[0]].Add(new CordPoint(int.Parse(fourthParse[0]), int.Parse(fourthParse[1]), float.Parse(fourthParse[2]), float.Parse(fourthParse[3]), float.Parse(fourthParse[4]), float.Parse(fourthParse[5]), float.Parse(fourthParse[6]), float.Parse(fourthParse[7]), float.Parse(fourthParse[8])));// this too
+            }//This extraction for CordPoint can  be dynamiced via json formatting
         } 
-        return temp; //check if it will get referenced or not
+        return temp; 
     }
 
-    public static string CreateStringDictionary(Dictionary<string[], Dictionary<float, CordPoint>> data) //this is a very poor way to write, need somebody opinion
+    public static string CreateStringDictionary(Dictionary<string, List<CordPoint>> data) //this is a very poor way to write, need somebody opinion
     {
         string temp = "";
-        foreach (KeyValuePair<string[], Dictionary<float, CordPoint>> nextData in data) 
+        foreach (KeyValuePair<string, List<CordPoint>> nextData in data) 
         {
             string dataLine = "";
-            foreach (string text in nextData.Key) 
-            {
-                dataLine += text + ','; 
-            }
+            dataLine += nextData.Key + ','; 
             string cordLine = "";
-            foreach (KeyValuePair<float, CordPoint> cordData in nextData.Value) 
+            foreach (CordPoint cordData in nextData.Value)  //It can be dynamiced via forloop + function from cordpoint maybe
             {
-                cordLine += cordData.Key.ToString() + ":" + cordData.Value.type + ":" + cordData.Value.id + ":" + cordData.Value.x + ":" + cordData.Value.y + ";";
+                cordLine += cordData.type + ":" + cordData.id + ":" + cordData.x1 + ":" + cordData.y1 + ":" + cordData.x2 + ":" + cordData.y2 + ":"+ cordData.velocity + ":" + cordData.expectedVelocity + ":"+ cordData.time.ToString() + ";";
             }
             cordLine = cordLine.Remove(cordLine.Length-1);
             cordLine += "\n";
             temp += dataLine + cordLine;
         }
+        if (temp == null) { Debug.LogError("no file to write detected!"); return temp; }
         temp = temp.Remove(temp.Length - 1);
-        Debug.LogWarning("STRING FORMAT HAS BEEN GENERATED, CONTINUE WRITING - " + data.Count);
         Debug.Log(temp);
         return temp;
     }
